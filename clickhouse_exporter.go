@@ -15,15 +15,20 @@ import (
 var (
 	listeningAddress    = flag.String("telemetry.address", ":9116", "Address on which to expose metrics.")
 	metricsEndpoint     = flag.String("telemetry.endpoint", "/metrics", "Path under which to expose metrics.")
-	clickhouseScrapeURI = flag.String("scrape_uri", "http://localhost:8123/", "URI to clickhouse http endpoint")
+	clickhouseScrapeURI = flag.String("scrape_uri", "http://localhost:8123/", "URI to clickhouse http endpoint (CLICKHOUSE_ADDRESS env var has priority)")
 	clickhouseOnly      = flag.Bool("clickhouse_only", false, "Expose only Clickhouse metrics, not metrics from the exporter itself")
 	insecure            = flag.Bool("insecure", true, "Ignore server certificate if using https")
+	clickAddress        = os.Getenv("CLICKHOUSE_ADDRESS")
 	user                = os.Getenv("CLICKHOUSE_USER")
 	password            = os.Getenv("CLICKHOUSE_PASSWORD")
 )
 
 func main() {
 	flag.Parse()
+
+    if clickAddress != "" {
+    	*clickhouseScrapeURI = clickAddress
+    }
 
 	uri, err := url.Parse(*clickhouseScrapeURI)
 	if err != nil {

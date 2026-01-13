@@ -1,0 +1,48 @@
+replicaCount: 1
+
+image:
+  pullPolicy: Always
+  repository: 'suleyman5004/clickhouse-exporter'
+  tag: 1.0.0
+  imagePullSecrets: {}
+
+secret:
+  enabled: true
+  val:
+    CLICKHOUSE_ADDRESS: "http://clickhouse:8123/"
+    CLICKHOUSE_USER: ""
+    CLICKHOUSE_PASSWORD: ""
+
+
+service:
+  type: ClusterIP
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 9116
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 9116
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+lifecycle: {}
+
+volumeMounts: {}
+
+volume: {}
+
+hostAliases: {}
+
+nodeSelector: {}
+
+affinity: {}
