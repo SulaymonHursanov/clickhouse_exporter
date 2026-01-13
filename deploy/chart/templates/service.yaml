@@ -27,10 +27,10 @@ spec:
   type: {{ .Values.service.type }}
 {{- end }}
   ports:
-  - port: {{ .Values.containers.port }}
+  - port: {{ .Values.service.port }}
+    targetPort: exporter-port
     protocol: TCP
-    targetPort: {{ .Values.containers.targetport }}
-    name: http
+    name: exporter-port
   {{- if eq .Values.service.type "NodePort" }}
     nodePort:  {{ .Values.containers.nodePort }}
   {{- end }}
